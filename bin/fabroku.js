@@ -15,14 +15,14 @@ import { apps } from "../lib/commands/apps.js";
 import { whoami } from "../lib/commands/whoami.js";
 import { deploy } from "../lib/commands/deploy.js";
 import { webhook } from "../lib/commands/webhook.js";
-import { runDumpdata, runLoaddata } from "../lib/commands/run.js";
+import { runCreatesuperuser, runDumpdata, runLoaddata } from "../lib/commands/run.js";
 
 const program = new Command();
 
 program
   .name("fabroku")
   .description("🚀 Fabroku CLI — Ferramenta de deploy para o Fabroku")
-  .version("0.1.51");
+  .version("0.1.53");
 
 // ---- login ----
 program
@@ -123,6 +123,16 @@ run
   .option("--manage <path>", "Caminho relativo do manage.py dentro do app", "manage.py")
   .action(async (dumpArgs, options) => {
     await runDumpdata(options, dumpArgs);
+  });
+
+run
+  .command("createsuperuser")
+  .description("Abrir uma sessao interativa de Django createsuperuser no app")
+  .option("-a, --app <name>", "Nome ou ID do app (senao detecta pelo git remote)")
+  .option("-d, --dir <path>", "Diretorio local usado para detectar o app", ".")
+  .option("--manage <path>", "Caminho relativo do manage.py dentro do app", "manage.py")
+  .action(async (options) => {
+    await runCreatesuperuser(options);
   });
 
 program.parse();
