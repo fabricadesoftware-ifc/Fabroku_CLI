@@ -1,6 +1,6 @@
 {
   "name": "fabroku",
-  "version": "0.1.4",
+  "version": "0.1.51",
   "description": "CLI para o Fabroku PaaS — Verificação de deploy, autenticação e gerenciamento de apps.",
   "type": "module",
   "bin": {
@@ -26,7 +26,6 @@
   "dependencies": {
     "chalk": "^5.3.0",
     "commander": "^12.1.0",
-    "fabroku": "^0.1.4",
     "open": "^10.1.0"
   }
 }

@@ -22,7 +22,7 @@ const program = new Command();
 program
   .name("fabroku")
   .description("🚀 Fabroku CLI — Ferramenta de deploy para o Fabroku")
-  .version("0.1.4");
+  .version("0.1.51");
 
 // ---- login ----
 program
