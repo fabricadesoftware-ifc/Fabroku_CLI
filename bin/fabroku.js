@@ -15,6 +15,7 @@ import { apps } from "../lib/commands/apps.js";
 import { whoami } from "../lib/commands/whoami.js";
 import { deploy } from "../lib/commands/deploy.js";
 import { webhook } from "../lib/commands/webhook.js";
+import { runDumpdata, runLoaddata } from "../lib/commands/run.js";
 
 const program = new Command();
 
@@ -93,6 +94,35 @@ program
   )
   .action(async (appId, options) => {
     await webhook(appId, options);
+  });
+
+// ---- run ----
+const run = program.command("run").description("Executar rotinas dentro de um app Fabroku");
+
+run
+  .command("loaddata")
+  .description("Enviar um fixture local e executar Django loaddata no app")
+  .argument("<fixture>", "Arquivo JSON local")
+  .option("--django", "Executar usando Django")
+  .option("-a, --app <name>", "Nome ou ID do app (senao detecta pelo git remote)")
+  .option("-d, --dir <path>", "Diretorio local usado para detectar o app", ".")
+  .option("--manage <path>", "Caminho relativo do manage.py dentro do app", "manage.py")
+  .action(async (fixture, options) => {
+    await runLoaddata(fixture, options);
+  });
+
+run
+  .command("dumpdata")
+  .description("Executar Django dumpdata no app e baixar o JSON gerado")
+  .allowUnknownOption(true)
+  .argument("[dumpArgs...]", "Argumentos repassados ao Django apos --")
+  .option("--django", "Executar usando Django")
+  .requiredOption("-o, --output <path>", "Arquivo JSON local de destino")
+  .option("-a, --app <name>", "Nome ou ID do app (senao detecta pelo git remote)")
+  .option("-d, --dir <path>", "Diretorio local usado para detectar o app", ".")
+  .option("--manage <path>", "Caminho relativo do manage.py dentro do app", "manage.py")
+  .action(async (dumpArgs, options) => {
+    await runDumpdata(options, dumpArgs);
   });
 
 program.parse();
