@@ -1,6 +1,6 @@
 {
   "name": "fabroku",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "CLI para o Fabroku PaaS — Verificação de deploy, autenticação e gerenciamento de apps.",
   "type": "module",
   "bin": {
@@ -8,6 +8,10 @@
   },
   "engines": {
     "node": ">=18.0.0"
+  },
+  "repository": {
+  "type": "git",
+  "url": "https://github.com/fabricadesoftware-ifc/Fabroku_CLI.git"
   },
   "release": {
     "branches": [
