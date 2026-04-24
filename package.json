@@ -9,8 +9,10 @@
   "engines": {
     "node": ">=18.0.0"
   },
-    "release": {
-    "branches": ["master"],
+  "release": {
+    "branches": [
+      "master"
+    ],
     "plugins": [
       "@semantic-release/commit-analyzer",
       "@semantic-release/release-notes-generator",
@@ -30,7 +32,7 @@
     "paas",
     "dokku"
   ],
-  "author": "Fábrica de Software IFC",
+  "author": "fabricadesoftware-ifc",
   "license": "MIT",
   "dependencies": {
     "chalk": "^5.3.0",
