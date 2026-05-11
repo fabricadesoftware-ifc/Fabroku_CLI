@@ -16,13 +16,14 @@ import { whoami } from "../lib/commands/whoami.js";
 import { deploy } from "../lib/commands/deploy.js";
 import { webhook } from "../lib/commands/webhook.js";
 import { runCreatesuperuser, runDumpdata, runLoaddata } from "../lib/commands/run.js";
+import { dbConnect } from "../lib/commands/db.js";
 
 const program = new Command();
 
 program
   .name("fabroku")
   .description("🚀 Fabroku CLI — Ferramenta de deploy para o Fabroku")
-  .version("1.0.8");
+  .version("1.0.9");
 
 // ---- login ----
 program
@@ -133,6 +134,19 @@ run
   .option("--manage <path>", "Caminho relativo do manage.py dentro do app", "manage.py")
   .action(async (options) => {
     await runCreatesuperuser(options);
+  });
+
+// ---- db ----
+const db = program.command("db").description("Conectar e operar bancos vinculados a apps Fabroku");
+
+db
+  .command("connect")
+  .description("Abrir uma sessao auditada no Postgres vinculado ao app")
+  .option("-a, --app <name>", "Nome ou ID do app (senao detecta pelo git remote)")
+  .option("-d, --dir <path>", "Diretorio local usado para detectar o app", ".")
+  .option("-s, --service <name>", "Nome ou ID do servico Postgres quando houver mais de um")
+  .action(async (options) => {
+    await dbConnect(options);
   });
 
 program.parse();
