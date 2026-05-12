@@ -8,6 +8,7 @@
  */
 
 import { Command } from "commander";
+import { createRequire } from "node:module";
 
 import { login, logout } from "../lib/commands/login.js";
 import { verify } from "../lib/commands/verify.js";
@@ -17,13 +18,22 @@ import { deploy } from "../lib/commands/deploy.js";
 import { webhook } from "../lib/commands/webhook.js";
 import { runCreatesuperuser, runDumpdata, runLoaddata } from "../lib/commands/run.js";
 import { dbConnect } from "../lib/commands/db.js";
+import { notifyIfUpdateAvailable } from "../lib/update-check.js";
 
+const require = createRequire(import.meta.url);
+// O semantic-release do deploy.yml atualiza a versao do package antes de
+// publicar no npm. Ler daqui evita manter uma segunda versao hardcoded no bin.
+const packageJson = require("../package.json");
 const program = new Command();
 
 program
   .name("fabroku")
   .description("🚀 Fabroku CLI — Ferramenta de deploy para o Fabroku")
-  .version("1.0.10");
+  .version(packageJson.version);
+
+program.hook("preAction", async () => {
+  await notifyIfUpdateAvailable(packageJson.version);
+});
 
 // ---- login ----
 program
