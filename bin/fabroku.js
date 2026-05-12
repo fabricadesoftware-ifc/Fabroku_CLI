@@ -23,7 +23,7 @@ const program = new Command();
 program
   .name("fabroku")
   .description("🚀 Fabroku CLI — Ferramenta de deploy para o Fabroku")
-  .version("1.0.9");
+  .version("1.0.10");
 
 // ---- login ----
 program
@@ -102,8 +102,8 @@ const run = program.command("run").description("Executar rotinas dentro de um ap
 
 run
   .command("loaddata")
-  .description("Enviar um fixture local e executar Django loaddata no app")
-  .argument("<fixture>", "Arquivo JSON local")
+  .description("Executar Django loaddata com um fixture ja presente no app")
+  .argument("<fixture>", "Caminho relativo do fixture JSON dentro do app")
   .option("--django", "Executar usando Django")
   .option("-a, --app <name>", "Nome ou ID do app (senao detecta pelo git remote)")
   .option("-d, --dir <path>", "Diretorio local usado para detectar o app", ".")
