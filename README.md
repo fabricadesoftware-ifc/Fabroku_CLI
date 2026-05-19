@@ -95,6 +95,6 @@ A CLI salva as credenciais em `~/.fabroku/config.json`:
 ```bash
 cd Fabroku_CLI
 npm install
-npm link        # Instala globalmente em modo dev
+npm link        # Instala globalmente em mode dev
 fabroku --help  # Testa
 ```
