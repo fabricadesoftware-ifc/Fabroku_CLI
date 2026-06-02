@@ -10,8 +10,8 @@
     "node": ">=18.0.0"
   },
   "repository": {
-  "type": "git",
-  "url": "https://github.com/fabricadesoftware-ifc/Fabroku_CLI.git"
+    "type": "git",
+    "url": "https://github.com/fabricadesoftware-ifc/Fabroku_CLI.git"
   },
   "release": {
     "branches": [
@@ -41,7 +41,8 @@
   "dependencies": {
     "chalk": "^5.3.0",
     "commander": "^12.1.0",
-    "open": "^10.1.0"
+    "open": "^10.1.0",
+    "ws": "^8.21.0"
   },
   "devDependencies": {
     "@semantic-release/github": "^12.0.6",
