@@ -16,7 +16,7 @@ import { apps } from "../lib/commands/apps.js";
 import { whoami } from "../lib/commands/whoami.js";
 import { deploy } from "../lib/commands/deploy.js";
 import { webhook } from "../lib/commands/webhook.js";
-import { runCreatesuperuser, runDumpdata, runLoaddata } from "../lib/commands/run.js";
+import { runCreatesuperuser, runDumpdata, runLoaddata, runMigrate } from "../lib/commands/run.js";
 import { dbConnect } from "../lib/commands/db.js";
 import { notifyIfUpdateAvailable } from "../lib/update-check.js";
 
@@ -120,6 +120,17 @@ run
   .option("--manage <path>", "Caminho relativo do manage.py dentro do app", "manage.py")
   .action(async (fixture, options) => {
     await runLoaddata(fixture, options);
+  });
+
+run
+  .command("migrate")
+  .description("Executar Django migrate no app")
+  .option("-a, --app <name>", "Nome ou ID do app (senao detecta pelo git remote)")
+  .option("-d, --dir <path>", "Diretorio local usado para detectar o app", ".")
+  .option("--manage <path>", "Caminho relativo do manage.py dentro do app", "manage.py")
+  .option("--noinput", "Adicionar --noinput ao comando Django migrate")
+  .action(async (options) => {
+    await runMigrate(options);
   });
 
 run
