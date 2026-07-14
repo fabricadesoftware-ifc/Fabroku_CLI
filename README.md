@@ -78,6 +78,21 @@ fabroku apps
 fabroku apps --project 42
 ```
 
+### `fabroku db connect`
+
+Abre uma sessao SQL auditada em um PostgreSQL ou PostGIS vinculado ao app.
+
+```bash
+fabroku db connect --app meu-app
+
+# Necessario quando o app possui mais de um banco compativel
+fabroku db connect --app meu-app --service mapas-db
+```
+
+A sessao usa `dokku postgres:connect` no servidor. PostGIS e tratado como um
+banco PostgreSQL compativel; a extensao espacial ja e habilitada na criacao do
+servico pelo Fabroku.
+
 ## Configuração
 
 A CLI salva as credenciais em `~/.fabroku/config.json`:

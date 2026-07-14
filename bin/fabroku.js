@@ -162,10 +162,10 @@ const db = program.command("db").description("Conectar e operar bancos vinculado
 
 db
   .command("connect")
-  .description("Abrir uma sessao auditada no Postgres vinculado ao app")
+  .description("Abrir uma sessao auditada em um PostgreSQL ou PostGIS vinculado ao app")
   .option("-a, --app <name>", "Nome ou ID do app (senao detecta pelo git remote)")
   .option("-d, --dir <path>", "Diretorio local usado para detectar o app", ".")
-  .option("-s, --service <name>", "Nome ou ID do servico Postgres quando houver mais de um")
+  .option("-s, --service <name>", "Nome ou ID do banco quando houver mais de um")
   .action(async (options) => {
     await dbConnect(options);
   });
