@@ -59,3 +59,29 @@ test("getPaginated protects against repeated next links", async () => {
     (error) => error instanceof APIError && error.statusCode === 500,
   );
 });
+
+test("listServices builds app and project filters", async () => {
+  const api = Object.create(FabrokuAPI.prototype);
+  let requestedPath;
+  api.getPaginated = async (path) => {
+    requestedPath = path;
+    return { results: [] };
+  };
+
+  await api.listServices({ app: 7, project: "project-1" });
+
+  assert.equal(requestedPath, "/api/apps/services/?app=7&project=project-1");
+});
+
+test("getRuntimeLogs limits the request to the selected app and line count", async () => {
+  const api = Object.create(FabrokuAPI.prototype);
+  let requestedPath;
+  api.get = async (path) => {
+    requestedPath = path;
+    return { lines: [] };
+  };
+
+  await api.getRuntimeLogs(7, 80);
+
+  assert.equal(requestedPath, "/api/logs/app-runtime/?app=7&num=80");
+});

@@ -93,6 +93,50 @@ A sessao usa `dokku postgres:connect` no servidor. PostGIS e tratado como um
 banco PostgreSQL compativel; a extensao espacial ja e habilitada na criacao do
 servico pelo Fabroku.
 
+### `fabroku mcp`
+
+Inicia um servidor [Model Context Protocol](https://modelcontextprotocol.io/)
+local via `stdio`, permitindo que ferramentas de IA consultem e operem o
+Fabroku usando a autenticação e as permissões já existentes na CLI.
+
+Primeiro autentique a CLI normalmente:
+
+```bash
+fabroku login
+```
+
+Depois configure o cliente MCP para iniciar o processo:
+
+```json
+{
+  "mcpServers": {
+    "fabroku": {
+      "command": "fabroku",
+      "args": ["mcp"]
+    }
+  }
+}
+```
+
+As ferramentas disponíveis permitem listar projetos, apps e serviços,
+consultar status e logs, executar migrations Django e solicitar redeploy. Por
+segurança, valores de variáveis de ambiente e outros segredos não são
+retornados.
+
+#### Fluxo de redeploy para IAs
+
+O MCP não cria commits e não envia arquivos locais. Antes de chamar
+`fabroku_redeploy`, a IA deve:
+
+1. Alterar o código e revisar o diff.
+2. Executar os testes apropriados.
+3. Criar um commit com as alterações.
+4. Executar `git push` para a branch configurada no app.
+5. Chamar `fabroku_redeploy` confirmando `confirmed_committed_and_pushed=true`.
+
+Isso é necessário porque o Fabroku faz redeploy do repositório remoto; código
+sem commit ou sem `git push` não chega ao servidor.
+
 ## Configuração
 
 A CLI salva as credenciais em `~/.fabroku/config.json`:

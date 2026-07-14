@@ -18,6 +18,7 @@ import { deploy } from "../lib/commands/deploy.js";
 import { webhook } from "../lib/commands/webhook.js";
 import { runCreatesuperuser, runDumpdata, runLoaddata, runMigrate } from "../lib/commands/run.js";
 import { dbConnect } from "../lib/commands/db.js";
+import { startMcpServer } from "../lib/mcp/server.js";
 import { notifyIfUpdateAvailable } from "../lib/update-check.js";
 
 const require = createRequire(import.meta.url);
@@ -31,7 +32,9 @@ program
   .description("🚀 Fabroku CLI — Ferramenta de deploy para o Fabroku")
   .version(packageJson.version);
 
-program.hook("preAction", async () => {
+program.hook("preAction", async (_thisCommand, actionCommand) => {
+  // O stdout do servidor MCP e reservado exclusivamente ao protocolo JSON-RPC.
+  if (actionCommand.name() === "mcp") return;
   await notifyIfUpdateAvailable(packageJson.version);
 });
 
@@ -170,4 +173,18 @@ db
     await dbConnect(options);
   });
 
-program.parse();
+// ---- mcp ----
+program
+  .command("mcp")
+  .description("Iniciar o servidor MCP local do Fabroku via stdio")
+  .action(async () => {
+    await startMcpServer({ version: packageJson.version });
+  });
+
+try {
+  await program.parseAsync();
+} catch (error) {
+  // stderr e seguro para diagnosticos; stdout pertence ao MCP no modo stdio.
+  console.error(error instanceof Error ? error.message : String(error));
+  process.exitCode = 1;
+}
