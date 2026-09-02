@@ -67,6 +67,7 @@ Verificar usuário autenticado e status do token.
 fabroku whoami
 ```
 
+
 ### `fabroku apps`
 
 Listar seus apps.
