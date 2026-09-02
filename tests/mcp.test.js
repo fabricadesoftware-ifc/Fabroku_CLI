@@ -1,5 +1,8 @@
 import test from "node:test";
 import assert from "node:assert/strict";
+import { mkdtempSync, rmSync } from "node:fs";
+import { tmpdir } from "node:os";
+import { join } from "node:path";
 
 import { Client } from "@modelcontextprotocol/sdk/client/index.js";
 import { StdioClientTransport } from "@modelcontextprotocol/sdk/client/stdio.js";
@@ -99,10 +102,12 @@ test("MCP negotiates and exposes only the intended tools", async () => {
 });
 
 test("fabroku mcp starts through stdio without corrupting protocol output", async () => {
+  const configDirectory = mkdtempSync(join(tmpdir(), "fabroku-mcp-test-"));
   const transport = new StdioClientTransport({
     command: process.execPath,
     args: ["bin/fabroku.js", "mcp"],
     cwd: process.cwd(),
+    env: { FABROKU_CONFIG_DIR: configDirectory },
     stderr: "pipe",
   });
   const client = new Client({ name: "fabroku-stdio-test", version: "test" });
@@ -113,6 +118,7 @@ test("fabroku mcp starts through stdio without corrupting protocol output", asyn
     assert.ok(response.tools.some((tool) => tool.name === "fabroku_redeploy"));
   } finally {
     await client.close();
+    rmSync(configDirectory, { recursive: true, force: true });
   }
 });
 
