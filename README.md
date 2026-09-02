@@ -1,6 +1,6 @@
 # 🚀 Fabroku CLI
 
-Ferramenta de linha de comando para o [Fabroku PaaS](https://github.com/fabricadesoftware-ifc/Fabroku) — verifica arquivos de deploy, autentica via GitHub e gerencia apps.
+Ferramenta de linha de comando para o [Fabroku PaaS](https://fabroku.fabricadesoftware.ifc.edu.br/) — verifica arquivos de deploy, autentica via GitHub e gerencia apps.
 
 ## Instalação
 
