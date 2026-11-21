@@ -8,7 +8,7 @@ Ferramenta de linha de comando para o [Fabroku PaaS](https://fabroku.fabricadeso
 npm i -g fabroku
 ```
 
-> Requer Node.js 18+
+> Requer Node.js 20.9+
 
 ## Comandos
 
@@ -150,11 +150,37 @@ A CLI salva as credenciais em `~/.fabroku/config.json`:
 }
 ```
 
+### Tema e interface (`fabroku config`)
+
+No terminal, `apps` e `deploy` usam uma interface rica (tabela, etapas com spinner,
+barra de progresso), feita com [Ink](https://github.com/vadimdemedes/ink) e
+componentes do [termcn](https://termcn.dev).
+
+```bash
+fabroku config                        # tela interativa com prévia do tema
+fabroku config set tema tokyo-night   # 41 temas: fabroku config temas
+fabroku config set interface simples  # sempre texto simples, como antes
+fabroku config set animacoes false
+fabroku config set unicode nao        # só ASCII
+fabroku config reset
+```
+
+As opções ficam em `~/.fabroku/config.json`, na chave `ui`. Sem terminal (pipe,
+CI, IA rodando a CLI, `fabroku mcp`) a saída é sempre texto simples. Para uma
+execução só em texto: `FABROKU_UI=simples fabroku deploy`.
+
 ## Desenvolvimento
 
 ```bash
 cd Fabroku_CLI
 npm install
+npm run build   # compila tui/ (TSX) para lib/tui/
 npm link        # Instala globalmente em mode dev
 fabroku --help  # Testa
 ```
+
+- `tui/` é o código da interface rica. `components/`, `hooks/`, `lib/` e `providers/`
+  vieram do termcn e agora são nossos; para trazer outro componente:
+  `npm run termcn:add -- ink/<nome>`.
+- `node scripts/tui-demo.mjs apps|deploy|deploy-erro [tema]` mostra as telas com dados de exemplo.
+- `npm run typecheck` confere os tipos do `tui/`.
