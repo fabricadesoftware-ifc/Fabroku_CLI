@@ -18,6 +18,7 @@ import { deploy } from "../lib/commands/deploy.js";
 import { webhook } from "../lib/commands/webhook.js";
 import { runCreatesuperuser, runDumpdata, runLoaddata, runMigrate } from "../lib/commands/run.js";
 import { dbConnect } from "../lib/commands/db.js";
+import { config } from "../lib/commands/config.js";
 import { startMcpServer } from "../lib/mcp/server.js";
 import { notifyIfUpdateAvailable } from "../lib/update-check.js";
 
@@ -87,6 +88,28 @@ program
   .option("--no-wait", "Não aguardar o deploy terminar")
   .action(async (options) => {
     await deploy(options);
+  });
+
+// ---- config ----
+program
+  .command("config")
+  .description("Tema e opções de interface da CLI (sem argumentos abre a tela interativa)")
+  .argument("[acao]", "list | get | set | temas | reset")
+  .argument("[chave]", "tema | interface | animacoes | unicode")
+  .argument("[valor]", "novo valor (para set)")
+  .addHelpText(
+    "after",
+    `
+Exemplos:
+  $ fabroku config                       tela interativa com prévia do tema
+  $ fabroku config set tema tokyo-night
+  $ fabroku config set interface simples sempre texto simples (como antes)
+  $ fabroku config temas                 lista os temas
+
+Para uma execução só em texto simples: FABROKU_UI=simples fabroku <comando>`,
+  )
+  .action(async (acao, chave, valor) => {
+    await config(acao, chave, valor);
   });
 
 // ---- whoami ----
